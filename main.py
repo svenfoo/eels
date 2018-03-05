@@ -1,5 +1,6 @@
 
 from BookImporter import BookImporter
+from BookExporter import BookExporter
 
 import sys, getopt
 
@@ -10,7 +11,7 @@ def printHelp():
 
 def main(argv):
     inputFile = 'test.epub'
-    outputFile = ''
+    outputFile = 'output.epub'
     try:
         opts, args = getopt.getopt(argv, "hi:o:")
     except getopt.GetoptError:
@@ -26,10 +27,10 @@ def main(argv):
             outputFile = arg
 
     src = BookImporter(inputFile)
+    dest = BookExporter(outputFile)
     for item in src.items:
-        print(item)
-
-
+        dest.add(item)
+    dest.write()
 
 if __name__ == "__main__":
    main(sys.argv[1:])
