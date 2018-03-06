@@ -10,7 +10,7 @@ def printHelp():
 
 
 def main(argv):
-    inputFile = 'test.epub'
+    inputFile = 'test.epub'di
     outputFile = 'output.epub'
     try:
         opts, args = getopt.getopt(argv, "hi:o:")
@@ -28,8 +28,10 @@ def main(argv):
 
     src = BookImporter(inputFile)
     dest = BookExporter(outputFile)
-    for item in src.items:
-        dest.add(item)
+    for info in src.items:
+        with src.open(info) as content:
+            dest.add(info, content)
+
     dest.write()
 
 if __name__ == "__main__":

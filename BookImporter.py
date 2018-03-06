@@ -7,3 +7,6 @@ class BookImporter:
     @property
     def items(self):
         return self.file.infolist()
+
+    def open(self, info):
+        return self.file.open(info)
