@@ -40,7 +40,7 @@ def main(argv):
             if info.filename.endswith(".html"):
                 translator.translate(info, content)
             else:
-                dest.add(info, content)
+                dest.add(info, content.read())
         content.close()
 
     dest.write()
