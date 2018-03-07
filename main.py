@@ -11,11 +11,11 @@ def printHelp():
 
 
 def main(argv):
-    inputFile = 'test.epub'
-    inputLanguage = 'EN'
+    inputFile = "test.epub"
+    inputLanguage = "EN"
 
-    outputFile = 'output.epub'
-    outputLanguage = 'DE'
+    outputFile = "output.epub"
+    outputLanguage = "DE"
 
     try:
         opts, args = getopt.getopt(argv, "hi:o:")
@@ -23,7 +23,7 @@ def main(argv):
         printHelp()
         sys.exit(2)
     for opt, arg in opts:
-        if opt == '-h':
+        if opt == "-h":
             printHelp()
             sys.exit()
         elif opt == "-i":
@@ -37,7 +37,11 @@ def main(argv):
 
     for info in src.items:
         with src.open(info) as content:
-            translator.translate(info, content)
+            if info.filename.endswith(".html"):
+                translator.translate(info, content)
+            else:
+                dest.add(info, content)
+        content.close()
 
     dest.write()
 
