@@ -4,3 +4,4 @@ getopt
 output.epub
 test.epub
 venv/
+*.pyc

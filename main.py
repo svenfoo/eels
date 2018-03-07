@@ -1,6 +1,7 @@
 
 from BookImporter import BookImporter
 from BookExporter import BookExporter
+from Translator import Translator
 
 import sys, getopt
 
@@ -10,8 +11,12 @@ def printHelp():
 
 
 def main(argv):
-    inputFile = 'test.epub'di
+    inputFile = 'test.epub'
+    inputLanguage = 'EN'
+
     outputFile = 'output.epub'
+    outputLanguage = 'DE'
+
     try:
         opts, args = getopt.getopt(argv, "hi:o:")
     except getopt.GetoptError:
@@ -28,9 +33,11 @@ def main(argv):
 
     src = BookImporter(inputFile)
     dest = BookExporter(outputFile)
+    translator = Translator(dest, outputLanguage, inputLanguage)
+
     for info in src.items:
         with src.open(info) as content:
-            dest.add(info, content)
+            translator.translate(info, content)
 
     dest.write()
 

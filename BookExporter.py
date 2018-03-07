@@ -5,7 +5,6 @@ class BookExporter:
         self.file = zipfile.ZipFile(filename, "w")
 
     def add(self, info, content):
-        print('writing', info)
         self.file.writestr(info, content.read())
 
     def write(self):
