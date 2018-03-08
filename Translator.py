@@ -1,4 +1,3 @@
-import nltk.data
 import pydeepl
 
 class Translator:
@@ -7,13 +6,13 @@ class Translator:
         self.outputLanguage = outputLanguage
         self.inputLanguage = inputLanguage
 
-        # TODO: assumes english as input language
-        self.tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-
     def translate(self, info, content):
         translation = ""
-        for sentence in self.tokenizer.tokenize(content.read()):
-            translation += self.translateSentence(sentence);
+        for bytesLine in content.read().split(b"\n"):
+            line = bytesLine.decode("utf-8")
+            translatedLine = self.translateSentence(line);
+            print(translatedLine)
+            translation += translatedLine
         self.dest.add(info, translation)
 
     def translateSentence(self, sentence):
