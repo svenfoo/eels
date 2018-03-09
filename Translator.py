@@ -17,20 +17,37 @@ class Translator:
 
 class HTMLTranslator(HTMLParser):
     def __init__(self, translator):
-        super.__init__(self)
+        HTMLParser.__init__(self)
         self.translator = translator
-        self.translation = ""
+        self.output = ""
+        self.paragraph = ""
 
 
     def translate(self, content):
         self.feed(content)
+        self.close()
+        self.flush
+        print(self.output)
+        return self.output
+
+
+    def flush(self):
+        if self.paragraph:
+            translation = self.translator.translateSentence(self.paragraph)
+            self.output += translation
+            self.paragraph = ""
 
 
     def add(self, str):
-        self.translation += str
+        self.flush()
+        self.output += str
 
 
-    def handle_starttag(self, tag, attrs):
+    def decl(self, decl):
+        self.add(output = "<!" + decl + ">")
+
+
+    def startTag(self, tag, attrs):
         output = "<" + tag
         for name, value in attrs:
             output += " " + name + "=\"" + value + "\""
@@ -38,12 +55,29 @@ class HTMLTranslator(HTMLParser):
         self.add(output)
 
 
-    def handle_endtag(self, tag):
+    def endTag(self, tag):
         output = "</" + tag + ">"
         self.add(output)
 
 
+    def data(self, data):
+        self.paragraph += data
+
+
+    def handle_decl(self, decl):
+        self.decl(decl)
+
+
+    def handle_starttag(self, tag, attrs):
+        if tag != "span":
+            self.startTag(tag, attrs)
+
+
+    def handle_endtag(self, tag):
+        if tag != "span":
+            self.endTag(tag)
+
+
     def handle_data(self, data):
-        output = self.translator.translateSentence(data)
-        self.add(output)
+        self.data(data)
 

@@ -33,7 +33,7 @@ def main(argv):
 
     src = BookImporter(inputFile)
     dest = BookExporter(outputFile)
-    translator = Translator(dest, outputLanguage, inputLanguage)
+    translator = Translator(outputLanguage, inputLanguage)
 
     for info in src.items:
         with src.open(info) as content:
