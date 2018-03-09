@@ -38,12 +38,15 @@ def main(argv):
     for info in src.items:
         with src.open(info) as content:
             if info.filename.endswith(".html"):
-                translator.translate(info, content)
+                utf8Content = content.read().decode("utf-8")
+                translation = translator.translateHTML(utf8Content)
+                dest.add(info, translation)
             else:
                 dest.add(info, content.read())
         content.close()
 
     dest.write()
+
 
 if __name__ == "__main__":
    main(sys.argv[1:])
