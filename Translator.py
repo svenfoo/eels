@@ -3,13 +3,19 @@ from html.parser import HTMLParser
 import pydeepl
 from pydeepl import TranslationError
 
+import time
+
 class Translator:
-    def __init__(self, outputLanguage, inputLanguage):
+    def __init__(self, outputLanguage, inputLanguage, throttle = 0):
         self.outputLanguage = outputLanguage
         self.inputLanguage = inputLanguage
+        if throttle > 0:
+            self.throttle = lambda : time.sleep(throttle)
+
 
     def translateWithErrorHandling(self, sentence):
         try:
+            self.throttle()
             return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
         except (TranslationError, IndexError) as error:
             print("Error trying to translate", "\""+ sentence + "\"")

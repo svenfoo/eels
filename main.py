@@ -7,8 +7,10 @@ import sys, getopt
 
 
 def printHelp():
-    print('main.py -i <inputfile> -o <outputfile>')
-
+    print("main.py")
+    print("   -i <inputfile>       ebook to translate (default: test.epub)")
+    print("   -o <outputfile>      output file (default: output.epub")
+    print("   -t <seconds>         seconds to wait after each translation request (default: 1)")
 
 def main(argv):
     inputFile = "test.epub"
@@ -17,8 +19,10 @@ def main(argv):
     outputFile = "output.epub"
     outputLanguage = "DE"
 
+    throttle = 1
+
     try:
-        opts, args = getopt.getopt(argv, "hi:o:")
+        opts, args = getopt.getopt(argv, "hi:o:t:")
     except getopt.GetoptError:
         printHelp()
         sys.exit(2)
@@ -30,10 +34,12 @@ def main(argv):
             inputFile = arg
         elif opt == "-o":
             outputFile = arg
+        elif opt == "-t":
+            throttle = int(arg)
 
     src = BookImporter(inputFile)
     dest = BookExporter(outputFile)
-    translator = Translator(outputLanguage, inputLanguage)
+    translator = Translator(outputLanguage, inputLanguage, throttle)
 
     for info in src.items:
         with src.open(info) as content:
