@@ -1,5 +1,7 @@
 from html.parser import HTMLParser
+
 import pydeepl
+from pydeepl import TranslationError
 
 class Translator:
     def __init__(self, outputLanguage, inputLanguage):
@@ -9,10 +11,10 @@ class Translator:
     def translateWithErrorHandling(self, sentence):
         try:
             return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
-        except (pydeepl.TranslationError, IndexError) as error:
+        except (TranslationError, IndexError) as error:
             print("Error trying to translate", "\""+ sentence + "\"")
             print(format(error))
-            return ""
+            raise pydeepl.TranslationError(error)
 
 
     def translateSentence(self, sentence):
@@ -45,7 +47,10 @@ class HTMLTranslator(HTMLParser):
 
     def flush(self):
         if self.paragraph:
-            translation = self.translator.translateSentence(self.paragraph)
+            try:
+                translation = self.translator.translateSentence(self.paragraph)
+            except TranslationError:
+                translation = "<span class=\"italic\">Translation Failure</span>"
             self.output += translation
             self.paragraph = ""
 
