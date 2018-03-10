@@ -6,9 +6,21 @@ class Translator:
         self.outputLanguage = outputLanguage
         self.inputLanguage = inputLanguage
 
+    def translateWithErrorHandling(self, sentence):
+        try:
+            return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
+        except (pydeepl.TranslationError, IndexError) as error:
+            print("Error trying to translate", "\""+ sentence + "\"")
+            print(format(error))
+            return ""
+
 
     def translateSentence(self, sentence):
-        return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
+        sentence = sentence.strip()
+        if (sentence):
+            return self.translateWithErrorHandling(sentence)
+        else:
+            return ""
 
 
     def translateHTML(self, content):
