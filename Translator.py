@@ -64,10 +64,19 @@ class HTMLTranslator(HTMLParser):
         self.add(output = "<!" + decl + ">")
 
 
+    def formatAttr(self, name, value):
+        if name == "title":
+            try:
+                value = self.translator.translateSentence(value)
+            except TranslationError:
+                pass
+        return name + "=\"" + value + "\""
+
+
     def startTag(self, tag, attrs):
         output = "<" + tag
         for name, value in attrs:
-            output += " " + name + "=\"" + value + "\""
+            output += " " + self.formatAttr(name, value)
         output += ">"
         self.add(output)
 
