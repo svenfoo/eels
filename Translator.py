@@ -50,9 +50,9 @@ class HTMLTranslator(HTMLParser):
             try:
                 translation = self.translator.translateSentence(self.paragraph)
             except TranslationError:
-                translation = "<span class=\"italic\">Translation Failure</span>"
-            self.output += translation
+                translation = "<span class=\"italic\">" + self.paragraph + "</span>"
             self.paragraph = ""
+            self.output += translation
 
 
     def add(self, str):
