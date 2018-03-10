@@ -14,13 +14,25 @@ class Translator:
 
 
     def translateWithErrorHandling(self, sentence):
-        try:
-            self.throttle()
-            return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
-        except (TranslationError, IndexError) as error:
-            print("Error trying to translate", "\""+ sentence + "\"")
-            print(format(error))
-            raise pydeepl.TranslationError(error)
+        self.throttle()
+        gracePeriod = 50
+        for retry in range(3, 0, -1):
+            try:
+                return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
+            except TranslationError as error:
+                print("Error trying to translate", "\""+ sentence + "\"")
+                print(format(error))
+                if retry and error.message.contains("unknown result"):
+                    print("Sleeping for", gracePeriod, "seconds before retry...")
+                    time.sleep(gracePeriod)
+                    gracePeriod *= 2
+                else:
+                    raise pydeepl.TranslationError(error)
+            except IndexError as error:
+                # workaround for https://github.com/EmilioK97/pydeepl/issues/2
+                print("Error trying to translate", "\""+ sentence + "\"")
+                print(format(error))
+                raise pydeepl.TranslationError(error)
 
 
     def translateSentence(self, sentence):
