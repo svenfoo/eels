@@ -59,7 +59,6 @@ class HTMLTranslator(HTMLParser):
         self.feed(content)
         self.close()
         self.flush
-        print(self.output)
         return self.output
 
 
