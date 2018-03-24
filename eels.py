@@ -9,10 +9,16 @@ import sys, getopt
 
 
 def printHelp():
-    print("main.py")
-    print("   -i <inputfile>       ebook to translate (default: test.epub)")
-    print("   -o <outputfile>      output file (default: output.epub")
-    print("   -t <seconds>         seconds to wait after each translation request (default: 1)")
+    print("eels - to fill into your hovercraft")
+    print()
+    print("Translates an eBook by passing it piece by piece through DeepL (deepl.com).")
+    print()
+    print("Options:")
+    print("   -i <filename>       ebook to translate (default: test.epub)")
+    print("   -il <language>      input language (default: EN)")
+    print("   -o <filename>       output file (default: output.epub)")
+    print("   -ol <language>      output language (default: DE)")
+    print("   -t <seconds>        seconds to wait after each translation request (default: 1)")
 
 def main(argv):
     inputFile = "test.epub"
@@ -22,7 +28,7 @@ def main(argv):
     throttle = 1
 
     try:
-        opts, args = getopt.getopt(argv, "hi:o:t:")
+        opts, args = getopt.getopt(argv, "hi:il:o:ol:t:")
     except getopt.GetoptError:
         printHelp()
         sys.exit(2)
@@ -32,8 +38,12 @@ def main(argv):
             sys.exit()
         elif opt == "-i":
             inputFile = arg
+        elif opt == "-il":
+            inputLanguage = arg;
         elif opt == "-o":
             outputFile = arg
+        elif opt == "-ol":
+            outputLanguage = arg
         elif opt == "-t":
             throttle = int(arg)
 
