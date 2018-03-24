@@ -1,6 +1,8 @@
+#!/usr/bin/python3
 
-from BookImporter import BookImporter
-from BookExporter import BookExporter
+from Book import Importer
+from Book import Exporter
+
 from Translator import Translator
 
 import sys, getopt
@@ -15,10 +17,8 @@ def printHelp():
 def main(argv):
     inputFile = "test.epub"
     inputLanguage = "EN"
-
     outputFile = "output.epub"
     outputLanguage = "DE"
-
     throttle = 1
 
     try:
@@ -37,8 +37,8 @@ def main(argv):
         elif opt == "-t":
             throttle = int(arg)
 
-    src = BookImporter(inputFile)
-    dest = BookExporter(outputFile)
+    src = Importer(inputFile)
+    dest = Exporter(outputFile)
     translator = Translator(outputLanguage, inputLanguage, throttle)
 
     for info in src.items:
