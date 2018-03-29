@@ -20,17 +20,17 @@ class Translator:
             try:
                 return pydeepl.translate(sentence, self.outputLanguage, from_lang=self.inputLanguage)
             except TranslationError as error:
-                print("Error trying to translate", "\""+ sentence + "\"")
+                print('Error trying to translate', '\"' + sentence + '\"')
                 print(format(error))
-                if retry and error.message.contains("unknown result"):
-                    print("Sleeping for", gracePeriod, "seconds before retry...")
+                if retry and error.message.contains('unknown result'):
+                    print('Sleeping for', gracePeriod, 'seconds before retry...')
                     time.sleep(gracePeriod)
                     gracePeriod *= 2
                 else:
                     raise pydeepl.TranslationError(error)
             except IndexError as error:
                 # workaround for https://github.com/EmilioK97/pydeepl/issues/2
-                print("Error trying to translate", "\""+ sentence + "\"")
+                print('Error trying to translate', '\"' + sentence + '\"')
                 print(format(error))
                 raise pydeepl.TranslationError(error)
 
@@ -40,7 +40,7 @@ class Translator:
         if (sentence):
             return self.translateWithErrorHandling(sentence)
         else:
-            return ""
+            return ''
 
 
     def translateHTML(self, content):
@@ -51,8 +51,8 @@ class HTMLTranslator(HTMLParser):
     def __init__(self, translator):
         HTMLParser.__init__(self)
         self.translator = translator
-        self.output = ""
-        self.paragraph = ""
+        self.output = ''
+        self.paragraph = ''
 
 
     def translate(self, content):
@@ -67,8 +67,8 @@ class HTMLTranslator(HTMLParser):
             try:
                 translation = self.translator.translateSentence(self.paragraph)
             except TranslationError:
-                translation = "<span class=\"italic\">" + self.paragraph + "</span>"
-            self.paragraph = ""
+                translation = '<span class=\"italic\">' + self.paragraph + '</span>'
+            self.paragraph = ''
             self.output += translation
 
 
@@ -78,28 +78,28 @@ class HTMLTranslator(HTMLParser):
 
 
     def decl(self, decl):
-        self.add(output = "<!" + decl + ">")
+        self.add(output = '<!' + decl + '>')
 
 
     def formatAttr(self, name, value):
-        if name == "title":
+        if name == 'title':
             try:
                 value = self.translator.translateSentence(value)
             except TranslationError:
                 pass
-        return name + "=\"" + value + "\""
+        return name + '=\"' + value + '\"'
 
 
     def startTag(self, tag, attrs):
-        output = "<" + tag
+        output = '<' + tag
         for name, value in attrs:
-            output += " " + self.formatAttr(name, value)
-        output += ">"
+            output += ' ' + self.formatAttr(name, value)
+        output += '>'
         self.add(output)
 
 
     def endTag(self, tag):
-        output = "</" + tag + ">"
+        output = '</' + tag + '>'
         self.add(output)
 
 
@@ -112,12 +112,12 @@ class HTMLTranslator(HTMLParser):
 
 
     def handle_starttag(self, tag, attrs):
-        if tag != "span":
+        if tag != 'span':
             self.startTag(tag, attrs)
 
 
     def handle_endtag(self, tag):
-        if tag != "span":
+        if tag != 'span':
             self.endTag(tag)
 
 
