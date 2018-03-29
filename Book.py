@@ -13,7 +13,7 @@ class Importer:
 
 class Exporter:
     def __init__(self, filename):
-        self.file = zipfile.ZipFile(filename, "w")
+        self.file = zipfile.ZipFile(filename, 'w')
 
     def add(self, info, content):
         self.file.writestr(info, content)
